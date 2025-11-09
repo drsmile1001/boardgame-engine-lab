@@ -1,5 +1,5 @@
 import staticPlugin from "@elysiajs/static";
-import { Elysia } from "elysia";
+import { Elysia, t } from "elysia";
 
 import type { Logger } from "~shared/Logger";
 import { AsyncLock } from "~shared/utils/AsyncLock";
@@ -30,7 +30,55 @@ export async function serve(baseLogger: Logger) {
 
 async function buildServer(baseLogger: Logger) {
   const logger = baseLogger.extend("Server");
+
+  let coutner = 0;
+
+  const eventHandlers: Record<string, (payload: any) => void> = {};
+
   const app = new Elysia()
+    .ws("/ws", {
+      open(ws) {
+        const connectionId = ws.id;
+        if (!eventHandlers[connectionId]) {
+          eventHandlers[connectionId] = (payload: any) => {
+            ws.send(JSON.stringify(payload));
+          };
+          logger.info({
+            event: "ws-connect",
+            emoji: "🔌",
+          })`WebSocket 連線已建立，連線 ID: ${connectionId}`;
+        }
+      },
+      close(ws) {
+        const connectionId = ws.id;
+        delete eventHandlers[connectionId];
+        logger.info({
+          event: "ws-disconnect",
+          emoji: "❌",
+        })`WebSocket 連線已關閉，連線 ID: ${connectionId}`;
+      },
+      message(ws, message) {
+        logger.info({
+          event: "ws-message",
+          emoji: "💬",
+        })`收到 WebSocket 訊息: action:${message.action}`;
+        if (message.action === "counter-add") {
+          coutner += 1;
+        } else if (message.action === "counter-reset") {
+          coutner = 0;
+        }
+        logger.info({
+          event: "ws-counter-update",
+          emoji: "🔢",
+        })`計數器更新為: ${coutner}`;
+        for (const eventHandler of Object.values(eventHandlers)) {
+          eventHandler({ counter: coutner });
+        }
+      },
+      body: t.Object({
+        action: t.Union([t.Literal("counter-add"), t.Literal("counter-reset")]),
+      }),
+    })
     .get("/api/now", () => {
       baseLogger.info()`收到 /api/now 請求`;
       return { now: new Date().toISOString() };
