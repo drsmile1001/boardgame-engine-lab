@@ -6,6 +6,7 @@
     "moduleResolution": "bundler",
     "paths": {
       "@/*": ["./src/*"],
+      "@public/*": ["./public/*"],
       "~test/*": ["./test/*"],
       "~shared/*": ["./shared/src/*"]
     },

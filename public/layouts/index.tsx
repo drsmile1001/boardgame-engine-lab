@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import type { PropsWithChildren } from "react";
 
-import "@/public/styles/global.css";
+import "@public/styles/global.css";
 
 interface LayoutProps extends PropsWithChildren {
   className?: string;

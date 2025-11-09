@@ -86,7 +86,7 @@ async function buildServer(baseLogger: Logger) {
     .use(
       await staticPlugin({
         prefix: "/",
-        assets: "src/public",
+        assets: "public",
       })
     );
 

@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 
-import { eventHub } from "@/public/services/EventHub";
+import { eventHub } from "@public/services/EventHub";
 import {
   type GameState,
   gameStateStore,
-} from "@/public/services/GameStateStore";
-import { wsClient } from "@/public/services/WebSocketClient";
+} from "@public/services/GameStateStore";
+import { wsClient } from "@public/services/WebSocketClient";
 
 export function ViewRoot() {
   const [state, setState] = useState(gameStateStore.getState());

@@ -8,6 +8,7 @@ importOrder:
   - "<THIRD_PARTY_MODULES>"
   - "^~shared/"
   - "^@/"
+  - "^@public/"
   - "^~test/"
   - "^[./]"
 importOrderSeparation: true
