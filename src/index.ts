@@ -2,24 +2,25 @@ import { cac } from "cac";
 
 import { createDefaultLoggerFromEnv } from "~shared/Logger";
 
-import { registerGreeting } from "./app/Greeting";
+const logger = createDefaultLoggerFromEnv().extend("boardgame-engine-lab");
 
-const logger = createDefaultLoggerFromEnv();
 const cli = cac();
 
-registerGreeting(cli, logger);
+cli.command("serve", "啟動服務").action(async () => {
+  const { serve } = await import("@/app/Serve");
+  await serve(logger);
+});
 
 cli.help();
-cli.parse(process.argv, { run: false });
-
-if (!cli.matchedCommand) {
-  cli.outputHelp();
-  process.exit(0);
-}
 
 try {
+  cli.parse(process.argv, { run: false });
+  if (!cli.matchedCommand) {
+    cli.outputHelp();
+    process.exit(0);
+  }
   await cli.runMatchedCommand();
 } catch (error) {
-  logger.error({ error }, "執行命令時發生錯誤");
+  logger.error({ error }, "執行 CLI 時發生錯誤");
   process.exit(1);
 }
