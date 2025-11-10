@@ -2,7 +2,18 @@ import staticPlugin from "@elysiajs/static";
 import { Elysia, t } from "elysia";
 
 import type { Logger } from "~shared/Logger";
+import { ServiceMapBuilder } from "~shared/ServiceMap";
 import { AsyncLock } from "~shared/utils/AsyncLock";
+
+import { buildLobbyApi } from "@/apis/LobbyApi";
+import { buildRequestMonitor } from "@/middlewares/RequestMonitor";
+import { GameRunner } from "@/services/GameRunner";
+import { GameStoreDefault } from "@/services/MatchStore";
+import { SessionTransportDefault } from "@/services/SessionTransport";
+
+import index from "@public/index.html";
+
+import type { AppServices } from "./AppServices";
 
 export async function serve(baseLogger: Logger) {
   const logger = baseLogger.extend("Server");
@@ -30,65 +41,47 @@ export async function serve(baseLogger: Logger) {
 
 async function buildServer(baseLogger: Logger) {
   const logger = baseLogger.extend("Server");
+  const services = await ServiceMapBuilder.create<AppServices>()
+    .register("Logger", logger)
+    .register(
+      "MatchStore",
+      ({ Logger }) => new GameStoreDefault(Logger, "game-saves")
+    )
+    .register(
+      "SessionTransport",
+      ({ Logger }) => new SessionTransportDefault(Logger)
+    )
+    .register("GameRunner", (deps) => new GameRunner(deps))
+    .build();
 
-  let coutner = 0;
-
-  const eventHandlers: Record<string, (payload: any) => void> = {};
+  const { SessionTransport } = services;
 
   const app = new Elysia()
-    .ws("/ws", {
+    .use(buildRequestMonitor(services))
+    .use(buildLobbyApi(services))
+    .ws("/games/:gameId/players/:playerId/ws", {
       open(ws) {
+        const { gameId, playerId } = ws.data.params;
         const connectionId = ws.id;
-        if (!eventHandlers[connectionId]) {
-          eventHandlers[connectionId] = (payload: any) => {
-            ws.send(JSON.stringify(payload));
-          };
-          logger.info({
-            event: "ws-connect",
-            emoji: "🔌",
-          })`WebSocket 連線已建立，連線 ID: ${connectionId}`;
-        }
+        SessionTransport.connect(gameId, playerId, connectionId, (payload) =>
+          ws.send(JSON.stringify(payload))
+        );
       },
       close(ws) {
         const connectionId = ws.id;
-        delete eventHandlers[connectionId];
-        logger.info({
-          event: "ws-disconnect",
-          emoji: "❌",
-        })`WebSocket 連線已關閉，連線 ID: ${connectionId}`;
+        SessionTransport.disconnect(connectionId);
       },
       message(ws, message) {
-        logger.info({
-          event: "ws-message",
-          emoji: "💬",
-        })`收到 WebSocket 訊息: action:${message.action}`;
-        if (message.action === "counter-add") {
-          coutner += 1;
-        } else if (message.action === "counter-reset") {
-          coutner = 0;
-        }
-        logger.info({
-          event: "ws-counter-update",
-          emoji: "🔢",
-        })`計數器更新為: ${coutner}`;
-        for (const eventHandler of Object.values(eventHandlers)) {
-          eventHandler({ counter: coutner });
-        }
+        SessionTransport.receiveMessage(ws.id, message);
       },
-      body: t.Object({
-        action: t.Union([t.Literal("counter-add"), t.Literal("counter-reset")]),
-      }),
-    })
-    .get("/api/now", () => {
-      baseLogger.info()`收到 /api/now 請求`;
-      return { now: new Date().toISOString() };
     })
     .use(
       await staticPlugin({
         prefix: "/",
         assets: "public",
       })
-    );
+    )
+    .get("/*", index);
 
   return {
     listen: () =>

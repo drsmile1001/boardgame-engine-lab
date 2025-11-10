@@ -1,21 +1,18 @@
-import clsx from "clsx";
 import type { PropsWithChildren } from "react";
 
 import "@public/styles/global.css";
 
 interface LayoutProps extends PropsWithChildren {
-  className?: string;
+  title?: string;
 }
 
-export default function Layout({ children, className }: LayoutProps) {
+export default function Layout({ children, title }: LayoutProps) {
   return (
-    <div
-      className={clsx(
-        "flex flex-col justify-center items-center w-full min-h-screen",
-        className
-      )}
-    >
-      {children}
+    <div className="flex flex-col w-full min-h-screen">
+      <header className="py-4 px-8 text-xl font-bold border-b border-gray-300 bg-stone-100 shadow">
+        {title}
+      </header>
+      <main className="flex-1 overflow-auto">{children}</main>
     </div>
   );
 }
