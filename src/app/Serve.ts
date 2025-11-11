@@ -6,9 +6,11 @@ import { ServiceMapBuilder } from "~shared/ServiceMap";
 import { AsyncLock } from "~shared/utils/AsyncLock";
 
 import { buildLobbyApi } from "@/apis/LobbyApi";
+import { buildPlayerApi } from "@/apis/PlayerApi";
 import { buildRequestMonitor } from "@/middlewares/RequestMonitor";
 import { GameRunner } from "@/services/GameRunner";
 import { GameStoreDefault } from "@/services/MatchStore";
+import { PlayerRepoYaml } from "@/services/PlayerRepoYaml";
 import { SessionTransportDefault } from "@/services/SessionTransport";
 
 import index from "@public/index.html";
@@ -44,6 +46,10 @@ async function buildServer(baseLogger: Logger) {
   const services = await ServiceMapBuilder.create<AppServices>()
     .register("Logger", logger)
     .register(
+      "PlayerRepo",
+      ({ Logger }) => new PlayerRepoYaml(Logger, "players.yaml")
+    )
+    .register(
       "MatchStore",
       ({ Logger }) => new GameStoreDefault(Logger, "game-saves")
     )
@@ -58,23 +64,8 @@ async function buildServer(baseLogger: Logger) {
 
   const app = new Elysia()
     .use(buildRequestMonitor(services))
+    .use(buildPlayerApi(services))
     .use(buildLobbyApi(services))
-    .ws("/games/:gameId/players/:playerId/ws", {
-      open(ws) {
-        const { gameId, playerId } = ws.data.params;
-        const connectionId = ws.id;
-        SessionTransport.connect(gameId, playerId, connectionId, (payload) =>
-          ws.send(JSON.stringify(payload))
-        );
-      },
-      close(ws) {
-        const connectionId = ws.id;
-        SessionTransport.disconnect(connectionId);
-      },
-      message(ws, message) {
-        SessionTransport.receiveMessage(ws.id, message);
-      },
-    })
     .use(
       await staticPlugin({
         prefix: "/",

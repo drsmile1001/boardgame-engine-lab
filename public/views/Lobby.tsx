@@ -2,11 +2,15 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import type { MatchBaseInfo, MatchStatus } from "@/schemas/Match";
+import type { Player } from "@/schemas/Player";
 
 import Layout from "@public/layouts";
 import { lobbyApi } from "@public/services/Apis";
 
-export function LobbyPage() {
+export type Props = {
+  player: Player;
+};
+export function LobbyPage(props: Props) {
   const [list, setList] = useState<MatchBaseInfo[]>([]);
 
   useEffect(() => {
@@ -35,7 +39,7 @@ export function LobbyPage() {
   }
 
   return (
-    <Layout title="遊戲大廳">
+    <Layout title="遊戲大廳" player={props.player}>
       <div className="flex p-4">
         {list.map((game) => (
           <Link

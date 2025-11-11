@@ -9,7 +9,7 @@ import { type Match, matchBaseInfoSchema } from "@/schemas/Match";
 export type Deps = Pick<AppServices, "Logger" | "MatchStore">;
 
 export function buildLobbyApi(deps: Deps) {
-  const { MatchStore } = deps;
+  const { Logger, MatchStore } = deps;
   return new Elysia({
     name: "LobbyApi",
   })
@@ -78,7 +78,31 @@ export function buildLobbyApi(deps: Deps) {
           }),
         },
       }
-    );
+    )
+    .ws("/ws", {
+      open(ws) {
+        Logger.info({
+          event: "ws-open",
+          emoji: "🔗",
+        })`WebSocket 連線已開啟，ID：${ws.id}`;
+
+        Logger.log("ws.data", ws.data);
+      },
+      close(ws) {
+        Logger.info({
+          event: "ws-close",
+          emoji: "❌",
+        })`WebSocket 連線已關閉，ID：${ws.id}`;
+      },
+      message(ws, message) {
+        Logger.info({
+          event: "ws-message",
+          emoji: "📨",
+        })`收到來自 ID：${ws.id} 的訊息`;
+        Logger.log("ws.data", ws.data);
+        Logger.log("ws.message", message);
+      },
+    });
 }
 
 export type LobbyApi = ReturnType<typeof buildLobbyApi>;
