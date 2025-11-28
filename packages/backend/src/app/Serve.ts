@@ -1,4 +1,3 @@
-import staticPlugin from "@elysiajs/static";
 import { Elysia, t } from "elysia";
 
 import type { Logger } from "~shared/Logger";
@@ -82,13 +81,7 @@ async function buildServer(baseLogger: Logger) {
     .get("/api/now", () => {
       baseLogger.info()`收到 /api/now 請求`;
       return { now: new Date().toISOString() };
-    })
-    .use(
-      await staticPlugin({
-        prefix: "/",
-        assets: "public",
-      })
-    );
+    });
 
   return {
     listen: () =>

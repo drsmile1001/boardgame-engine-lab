@@ -1,23 +1,34 @@
-# 依賴與產物
-node_modules/
-bun.lockb
-*.bun
+# dependencies (bun install)
+node_modules
 
-# 編譯輸出（若日後 build 為 JS）
-dist/
-
-# 暫存與中介檔案
-*.log
-*.tmp
-*.trace
-*.zip
-*.tar.gz
+# output
+out
+dist
 *.tgz
-*.bak
 
-# 作業系統雜項
+# code coverage
+coverage
+*.lcov
+
+# logs
+logs
+_.log
+report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
+
+# dotenv environment variable files
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+
+# caches
+.eslintcache
+.cache
+*.tsbuildinfo
+
+# IntelliJ based IDEs
+.idea
+
+# Finder (MacOS) folder config
 .DS_Store
-
-# 私密設定
-.env*
-*.pem

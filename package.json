@@ -1,29 +1,20 @@
 {
   "name": "boardgame-engine-lab",
-  "version": "0.1.0",
-  "description": "Hello World Bun Template",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "dev": "bun run --watch src/index.ts serve",
-    "index": "bun run src/index.ts",
-    "format": "bunx prettier . --write"
-  },
-  "dependencies": {
-    "@elysiajs/static": "^1.4.6",
-    "@sinclair/typebox": "^0.34.37",
-    "cac": "^6.7.14",
-    "clsx": "^2.1.1",
-    "elysia": "^1.4.15",
-    "kleur": "^4.1.5",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
-    "tailwindcss": "^4.1.17"
+    "dev": "bun run --filter '*' dev",
+    "dev:frontend": "bun run --filter frontend dev",
+    "dev:backend": "bun run --filter backend dev",
+    "build": "bun run --filter '*' build",
+    "format": "bun --filter '*' format"
   },
   "devDependencies": {
-    "@trivago/prettier-plugin-sort-imports": "^5.2.2",
-    "@types/react": "^19.2.2",
-    "@types/react-dom": "^19.2.2",
-    "bun-plugin-tailwind": "^0.1.2",
-    "bun-types": "latest",
-    "prettier": "^3.6.2"
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
   }
 }
