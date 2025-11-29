@@ -20,6 +20,7 @@ export async function serve(baseLogger: Logger) {
         event: "shutdown",
         emoji: "🛑",
       })`所有服務已關閉，準備退出`;
+      process.exit(0);
     });
   }
 

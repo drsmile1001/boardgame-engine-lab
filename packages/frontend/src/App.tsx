@@ -1,11 +1,5 @@
 import { createSignal } from "solid-js";
 
-import "./App.css";
-import solidLogo from "./assets/solid.svg";
-import viteLogo from "/vite.svg";
-
-const ws = new WebSocket(`ws://${window.location.host}/ws`);
-
 function App() {
   const [count, setCount] = createSignal(0);
 
@@ -15,34 +9,21 @@ function App() {
     console.log(text);
   }
 
-  // setInterval(()=>{
-  //   ws.send(JSON.stringify({type: "ping"}));
-  // })
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} class="logo" alt="Vite logo" />
-        </a>
-        <a href="https://solidjs.com" target="_blank">
-          <img src={solidLogo} class="logo solid" alt="Solid logo" />
-        </a>
-      </div>
-      <h1>Vite + Solid</h1>
-      <div class="card">
-        <button onClick={() => setCount((count) => count + 1)}>
+    <div class="p-6">
+      <h1 class="font-bold text-lg">title</h1>
+      <div class="my-4 flex flex-col gap-4">
+        <button
+          class="rounded bg-blue-200 px-2 py-1"
+          onClick={() => setCount((count) => count + 1)}
+        >
           count is {count()}
         </button>
-        <button onClick={fetchData}>Fetch /api/now</button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+        <button class="rounded bg-blue-200 px-2 py-1" onClick={fetchData}>
+          Fetch /api/now
+        </button>
       </div>
-      <p class="read-the-docs">
-        Click on the Vite and Solid logos to learn more
-      </p>
-    </>
+    </div>
   );
 }
 
