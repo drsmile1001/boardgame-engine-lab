@@ -1,8 +1,16 @@
 import { readFile, readdir, stat, writeFile } from "node:fs/promises";
 
-import { buildApi } from "@backend/api";
 import { createDefaultLoggerFromEnv } from "@drsmile1001/logger";
+import { ServiceMapBuilder } from "@drsmile1001/service-map";
 import { Elysia, file } from "elysia";
+
+import { buildLobbyApi } from "./apis/LobbyApi";
+import { buildPlayerApi } from "./apis/PlayerApi";
+import { buildPlayerSocket } from "./apis/PlayerSocket";
+import type { AppServices } from "./app/AppServices";
+import { buildRequestMonitor } from "./middlewares/RequestMonitor";
+import { GameStoreDefault } from "./services/MatchStore";
+import { PlayerRepoYaml } from "./services/PlayerRepoYaml";
 
 const logger = createDefaultLoggerFromEnv();
 
@@ -43,9 +51,27 @@ async function rewriteBaseUrl(root: string) {
 }
 
 await rewriteBaseUrl("public");
-
+const services = await ServiceMapBuilder.create<AppServices>()
+  .register("Logger", logger)
+  .register(
+    "PlayerRepo",
+    ({ Logger }) => new PlayerRepoYaml(Logger, "players.yaml")
+  )
+  .register(
+    "MatchStore",
+    ({ Logger }) => new GameStoreDefault(Logger, "game-saves")
+  )
+  // .register(
+  //   "SessionTransport",
+  //   ({ Logger }) => new SessionTransportDefault(Logger)
+  // )
+  // .register("GameRunner", (deps) => new GameRunner(deps))
+  .build();
 const app = new Elysia()
-  .use(await buildApi())
+  .use(buildRequestMonitor(services))
+  .use(buildPlayerSocket(services))
+  .use(buildPlayerApi(services))
+  .use(buildLobbyApi(services))
   .get("/*", async ({ path }) => {
     const allowedExtensions = [
       ".js",
@@ -92,3 +118,5 @@ async function shutdown(signal: string) {
 
 process.on("SIGINT", () => shutdown("SIGINT"));
 process.on("SIGTERM", () => shutdown("SIGTERM"));
+
+export type Api = typeof app;

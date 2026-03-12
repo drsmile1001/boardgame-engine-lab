@@ -1,6 +1,7 @@
-import type { AppServices } from "@/app/AppServices";
-import type { Player } from "@/schemas/Player";
 import Elysia from "elysia";
+
+import type { AppServices } from "@backend/app/AppServices";
+import type { Player } from "@backend/schemas/Player";
 
 export type Deps = Pick<AppServices, "PlayerRepo">;
 

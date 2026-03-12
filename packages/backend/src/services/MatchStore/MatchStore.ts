@@ -1,5 +1,6 @@
-import type { Match, MatchBaseInfo } from "@/schemas/Match";
-import type { Result } from "~shared/utils/Result";
+import type { Result } from "@drsmile1001/utils/Result";
+
+import type { Match, MatchBaseInfo } from "@backend/schemas/Match";
 
 export interface MatchStore {
   list(): Promise<MatchBaseInfo[]>;

@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@drsmile1001/logger": "^2.0.0",
+    "@drsmile1001/service-map": "^1.0.0",
+    "@drsmile1001/system-time": "^1.0.0",
     "@drsmile1001/utils": "^1.0.0",
     "@sinclair/typebox": "^0.34.48",
     "cac": "^7.0.0",

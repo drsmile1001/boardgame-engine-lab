@@ -1,8 +1,7 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-
 import Layout from "@public/layouts";
 import { lobbyApi } from "@public/services/Apis";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export function NewGamePage() {
   const [name, setName] = useState("");

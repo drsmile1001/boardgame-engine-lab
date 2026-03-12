@@ -1,5 +1,5 @@
+import type { SystemTime } from "@drsmile1001/system-time";
 import Elysia from "elysia";
-import type { SystemTime } from "~shared/SystemTime";
 
 export type RequestAtProviderDependency = {
   SystemTime: SystemTime;

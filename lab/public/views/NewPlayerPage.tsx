@@ -1,8 +1,7 @@
-import { useState } from "react";
-
 import Layout from "@public/layouts";
 import { playerApi } from "@public/services/Apis";
 import { syncCurrentPlayer } from "@public/services/CurrentPlayerStore";
+import { useState } from "react";
 
 export function NewPlayerPage() {
   const [name, setName] = useState("");

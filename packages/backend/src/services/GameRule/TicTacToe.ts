@@ -1,6 +1,6 @@
+import { type Result, err, ok } from "@drsmile1001/utils/Result";
 import { Type } from "@sinclair/typebox";
 import { Value } from "@sinclair/typebox/value";
-import { type Result, err, ok } from "~shared/utils/Result";
 
 import type { CreateGameContext, GameRule, MoveError } from "./GameRule";
 

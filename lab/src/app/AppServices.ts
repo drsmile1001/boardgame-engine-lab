@@ -1,10 +1,9 @@
-import type { Logger } from "~shared/Logger";
-
 import type { GameRule } from "@/services/GameRule/GameRule";
 import type { GameRunner } from "@/services/GameRunner";
 import type { MatchStore } from "@/services/MatchStore";
 import type { PlayerRepo } from "@/services/PlayerRepo";
 import type { SessionTransport } from "@/services/SessionTransport";
+import type { Logger } from "@drsmile1001/logger";
 
 export type AppServices = {
   Logger: Logger;

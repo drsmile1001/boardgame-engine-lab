@@ -1,8 +1,6 @@
-import type { PropsWithChildren } from "react";
-
 import type { Player } from "@/schemas/Player";
-
 import "@public/styles/global.css";
+import type { PropsWithChildren } from "react";
 
 interface LayoutProps extends PropsWithChildren {
   title?: string;

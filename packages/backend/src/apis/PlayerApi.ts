@@ -1,8 +1,9 @@
-import type { AppServices } from "@/app/AppServices";
-import { buildRequesterProvider } from "@/middlewares/buildRequesterProvider";
-import { type Player, playerSchema } from "@/schemas/Player";
 import Elysia, { t } from "elysia";
 import { ulid } from "ulid";
+
+import type { AppServices } from "@backend/app/AppServices";
+import { buildRequesterProvider } from "@backend/middlewares/buildRequesterProvider";
+import { type Player, playerSchema } from "@backend/schemas/Player";
 
 export type Deps = Pick<AppServices, "Logger" | "PlayerRepo">;
 

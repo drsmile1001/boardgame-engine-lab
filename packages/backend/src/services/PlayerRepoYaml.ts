@@ -1,8 +1,9 @@
-import { type Player, playerSchema } from "@/schemas/Player";
 import type { Logger } from "@drsmile1001/logger";
 import { Value } from "@sinclair/typebox/value";
 import { t } from "elysia";
 import QuickLRU from "quick-lru";
+
+import { type Player, playerSchema } from "@backend/schemas/Player";
 
 import type { PlayerRepo } from "./PlayerRepo";
 

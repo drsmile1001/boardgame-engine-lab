@@ -1,5 +1,4 @@
 import { cac } from "cac";
-
 import { createDefaultLoggerFromEnv } from "~shared/Logger";
 
 const logger = createDefaultLoggerFromEnv().extend("boardgame-engine-lab");

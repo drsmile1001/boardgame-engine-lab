@@ -1,6 +1,7 @@
-import type { AppServices } from "@/app/AppServices";
 import type { Logger } from "@drsmile1001/logger";
-import { isErr } from "~shared/utils/Result";
+import { isErr } from "@drsmile1001/utils/Result";
+
+import type { AppServices } from "@backend/app/AppServices";
 
 export type Deps = Pick<
   AppServices,
@@ -24,7 +25,7 @@ export class GameRunner {
     const loadResult = await GameStore.load(gameId);
     if (isErr(loadResult)) {
       logger.warn()`遊戲狀態未找到，當作建立新遊戲處理`;
-      const state = await GameRule.setup({});
+      const state = await GameRule.setup({} as any); //TODO: 這裡應該要有初始參數
       SessionTransport.sendToPlayer(gameId, playerId, state);
       return;
     }
@@ -42,7 +43,7 @@ export class GameRunner {
       return;
     }
     const newState = moveResult.value;
-    const saveResult = await GameStore.save(gameId, newState);
+    const saveResult = await GameStore.save(gameId, newState as any); //處理 any
     if (isErr(saveResult)) {
       logger.error()`無法保存遊戲狀態`;
       SessionTransport.sendToPlayer(gameId, playerId, {

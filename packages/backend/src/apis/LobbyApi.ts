@@ -1,9 +1,10 @@
-import type { AppServices } from "@/app/AppServices";
-import { buildRequesterProvider } from "@/middlewares/buildRequesterProvider";
-import { type Match, matchBaseInfoSchema } from "@/schemas/Match";
+import { isErr } from "@drsmile1001/utils/Result";
 import Elysia, { t } from "elysia";
 import { ulid } from "ulid";
-import { isErr } from "~shared/utils/Result";
+
+import type { AppServices } from "@backend/app/AppServices";
+import { buildRequesterProvider } from "@backend/middlewares/buildRequesterProvider";
+import { type Match, matchBaseInfoSchema } from "@backend/schemas/Match";
 
 export type Deps = Pick<AppServices, "Logger" | "MatchStore" | "PlayerRepo">;
 

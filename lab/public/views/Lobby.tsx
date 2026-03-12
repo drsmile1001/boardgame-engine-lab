@@ -1,11 +1,9 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-
 import type { MatchBaseInfo, MatchStatus } from "@/schemas/Match";
 import type { Player } from "@/schemas/Player";
-
 import Layout from "@public/layouts";
 import { lobbyApi } from "@public/services/Apis";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 export type Props = {
   player: Player;

@@ -1,7 +1,6 @@
+import { type Player } from "@/schemas/Player";
 import { proxy } from "valtio";
 import { subscribeKey } from "valtio/utils";
-
-import { type Player } from "@/schemas/Player";
 
 import { playerApi } from "./Apis";
 

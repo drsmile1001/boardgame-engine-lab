@@ -1,6 +1,6 @@
-import type { AppServices } from "@/app/AppServices";
-import { buildRequesterProvider } from "@/middlewares/buildRequesterProvider";
 import Elysia from "elysia";
+
+import type { AppServices } from "@backend/app/AppServices";
 
 export type Deps = Pick<AppServices, "Logger" | "PlayerRepo">;
 
@@ -20,6 +20,7 @@ export function buildPlayerSocket(deps: Deps) {
     },
   });
   api.server?.publish("startup", "PlayerSocket API started");
+  return api;
 }
 
 export type PlayerApi = ReturnType<typeof buildPlayerSocket>;

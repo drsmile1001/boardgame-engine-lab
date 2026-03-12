@@ -1,7 +1,6 @@
-import { treaty } from "@elysiajs/eden";
-
 import type { LobbyApi } from "@/apis/LobbyApi";
 import type { PlayerApi } from "@/apis/PlayerApi";
+import { treaty } from "@elysiajs/eden";
 
 const BASE_URL = "localhost:3000";
 export const lobbyApi = treaty<LobbyApi>(BASE_URL);

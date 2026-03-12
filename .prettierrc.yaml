@@ -8,6 +8,8 @@ importOrder:
   - "^bun:test$"
   - "^node:.*"
   - "<THIRD_PARTY_MODULES>"
+  - "^@backend/"
+  - "^@frontend"
   - "^[./]"
 importOrderSeparation: true
 importOrderSortSpecifiers: true

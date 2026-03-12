@@ -1,10 +1,11 @@
 import { YAML } from "bun";
 
-import type { Match, MatchBaseInfo } from "@/schemas/Match";
 import type { Logger } from "@drsmile1001/logger";
+import { type Result, err, ok } from "@drsmile1001/utils/Result";
 import { readdir } from "fs/promises";
 import QuickLRU from "quick-lru";
-import { type Result, err, ok } from "~shared/utils/Result";
+
+import type { Match, MatchBaseInfo } from "@backend/schemas/Match";
 
 import type { MatchStore } from "./MatchStore";
 

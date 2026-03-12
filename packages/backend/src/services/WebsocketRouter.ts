@@ -1,5 +1,6 @@
-import type { TopicMap } from "@/schemas/TopicMap";
 import type { ServerWebSocket } from "elysia/ws/bun";
+
+import type { TopicMap } from "@backend/schemas/TopicMap";
 
 export interface WebsocketRouter {
   publish<T extends keyof TopicMap>(topic: T, data: TopicMap[T]): void;
