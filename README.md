@@ -1,15 +1,3 @@
-# boardgame-engine-lab
+# 線上桌遊引擎lab
 
-To install dependencies:
-
-```bash
-bun install
-```
-
-To run:
-
-```bash
-bun run index.ts
-```
-
-This project was created using `bun init` in bun v1.3.1. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.
+本 repo 用來探索使用 bun + elysia + solidjs 實作線上桌遊引擎的可能性。

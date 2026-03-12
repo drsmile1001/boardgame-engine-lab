@@ -9,10 +9,14 @@
     "dev:frontend": "bun run --filter frontend dev",
     "dev:backend": "bun run --filter backend dev",
     "build": "bun run --filter '*' build",
-    "format": "bun --filter '*' format"
+    "format": "bunx prettier . --write",
+    "format:check": "bunx prettier . --check",
+    "typecheck": "bun run --workspaces --if-present typecheck"
   },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@trivago/prettier-plugin-sort-imports": "^6.0.2",
+    "@types/bun": "latest",
+    "prettier": "^3.8.1"
   },
   "peerDependencies": {
     "typescript": "^5"
