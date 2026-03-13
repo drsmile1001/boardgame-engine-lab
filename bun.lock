@@ -22,6 +22,7 @@
       "version": "0.1.0",
       "dependencies": {
         "@drsmile1001/logger": "^2.0.0",
+        "@drsmile1001/safe-exit": "^1.0.0",
         "@drsmile1001/service-map": "^1.0.0",
         "@drsmile1001/system-time": "^1.0.0",
         "@drsmile1001/utils": "^1.0.0",
@@ -90,6 +91,8 @@
     "@borewit/text-codec": ["@borewit/text-codec@0.1.1", "", {}, "sha512-5L/uBxmjaCIX5h8Z+uu+kA9BQLkc/Wl06UGR5ajNRxu+/XjonB5i8JpgFMrPj3LXTCPA0pv8yxUvbUi+QthGGA=="],
 
     "@drsmile1001/logger": ["@drsmile1001/logger@2.0.0", "", { "dependencies": { "kleur": "^4.1.5", "rotating-file-stream": "^3.2.7" } }, "sha512-ncyk4CtU/h5Z1JdINwWCCwsgRb6OxbHWMvZGl/FdJ8jre8E9+B86Aii+UmebmBae+qxkRWyAVFTuCAQvvW0bCw=="],
+
+    "@drsmile1001/safe-exit": ["@drsmile1001/safe-exit@1.0.0", "", { "dependencies": { "@drsmile1001/logger": "^2.0.0" } }, "sha512-6O89zXd7gX2dA9GHyoszelu9lnug2pq6+xvnUcl5MtTi43zlZ1JlX6BozTF0J1iHxHHm2hiQKPuKMILxoIVF8w=="],
 
     "@drsmile1001/service-map": ["@drsmile1001/service-map@1.0.0", "", { "dependencies": { "@drsmile1001/logger": "^1.0.0", "@drsmile1001/utils": "^1.0.0" } }, "sha512-y2WeisTgmh8xAzORhfITPeU0xkuu5JWldpgZaft6w8iYPpPALwuidF7IuoRj4/74JUcWSKqF9bUmwhYfibtb8A=="],
 
