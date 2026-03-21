@@ -10,6 +10,7 @@
     "typegen": "rm -rf .types && bunx tsc -p tsconfig.types.json"
   },
   "dependencies": {
+    "@drsmile1001/entity-store": "^1.0.0",
     "@drsmile1001/logger": "^2.0.0",
     "@drsmile1001/safe-exit": "^1.0.0",
     "@drsmile1001/service-map": "^1.0.0",

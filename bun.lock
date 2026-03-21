@@ -21,6 +21,7 @@
       "name": "backend",
       "version": "0.1.0",
       "dependencies": {
+        "@drsmile1001/entity-store": "^1.0.0",
         "@drsmile1001/logger": "^2.0.0",
         "@drsmile1001/safe-exit": "^1.0.0",
         "@drsmile1001/service-map": "^1.0.0",
@@ -90,6 +91,8 @@
     "@babel/types": ["@babel/types@7.28.5", "", { "dependencies": { "@babel/helper-string-parser": "^7.27.1", "@babel/helper-validator-identifier": "^7.28.5" } }, "sha512-qQ5m48eI/MFLQ5PxQj4PFaprjyCTLI37ElWMmNs0K8Lk3dVeOdNpB3ks8jc7yM5CDmVC73eMVk/trk3fgmrUpA=="],
 
     "@borewit/text-codec": ["@borewit/text-codec@0.1.1", "", {}, "sha512-5L/uBxmjaCIX5h8Z+uu+kA9BQLkc/Wl06UGR5ajNRxu+/XjonB5i8JpgFMrPj3LXTCPA0pv8yxUvbUi+QthGGA=="],
+
+    "@drsmile1001/entity-store": ["@drsmile1001/entity-store@1.0.0", "", { "dependencies": { "@drsmile1001/logger": "^1.0.0", "@drsmile1001/utils": "^1.0.0", "@sinclair/typebox": "^0.34.48" } }, "sha512-mop8+jCjQhmcBgnNnJxXYj2Oi49rkPYIBc4+qipJ/YKJRjT5+7OqIKPeoIi0w4+HXLwJ+E41HNbrsTBARel1aw=="],
 
     "@drsmile1001/logger": ["@drsmile1001/logger@2.0.0", "", { "dependencies": { "kleur": "^4.1.5", "rotating-file-stream": "^3.2.7" } }, "sha512-ncyk4CtU/h5Z1JdINwWCCwsgRb6OxbHWMvZGl/FdJ8jre8E9+B86Aii+UmebmBae+qxkRWyAVFTuCAQvvW0bCw=="],
 
@@ -492,6 +495,8 @@
     "vitefu": ["vitefu@1.1.1", "", { "peerDependencies": { "vite": "^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0-beta.0" }, "optionalPeers": ["vite"] }, "sha512-B/Fegf3i8zh0yFbpzZ21amWzHmuNlLlmJT6n7bu5e+pCHUKQIfXSYokrqOBGEMMe9UG2sostKQF9mml/vYaWJQ=="],
 
     "yallist": ["yallist@3.1.1", "", {}, "sha512-a4UGQaWPH59mOXUYnAG2ewncQS4i4F43Tv3JoAM+s2VDAmS9NsK8GpDMLrCHPksFT7h3K6TOoUNn2pb7RoXx4g=="],
+
+    "@drsmile1001/entity-store/@drsmile1001/logger": ["@drsmile1001/logger@1.0.0", "", { "dependencies": { "kleur": "^4.1.5", "rotating-file-stream": "^3.2.7" } }, "sha512-tCF0uCtHwesP4V5bQllEMHSaxZ3MJTzJyW4RAOsrtKHX28QwKJRgqG6yzcCZea5A6uDjKKprV4AV6cqzqxVqvg=="],
 
     "@drsmile1001/service-map/@drsmile1001/logger": ["@drsmile1001/logger@1.0.0", "", { "dependencies": { "kleur": "^4.1.5", "rotating-file-stream": "^3.2.7" } }, "sha512-tCF0uCtHwesP4V5bQllEMHSaxZ3MJTzJyW4RAOsrtKHX28QwKJRgqG6yzcCZea5A6uDjKKprV4AV6cqzqxVqvg=="],
 

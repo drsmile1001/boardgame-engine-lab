@@ -54,10 +54,11 @@ async function rewriteBaseUrl(root: string) {
 await rewriteBaseUrl("public");
 const services = await ServiceMapBuilder.create<AppServices>()
   .register("Logger", logger)
-  .register(
-    "PlayerRepo",
-    ({ Logger }) => new PlayerRepoYaml(Logger, "players.yaml")
-  )
+  .register("PlayerRepo", async ({ Logger }) => {
+    const playerRepo = new PlayerRepoYaml(Logger, "players.yaml");
+    await playerRepo.init();
+    return playerRepo;
+  })
   .register(
     "MatchStore",
     ({ Logger }) => new GameStoreDefault(Logger, "game-saves")

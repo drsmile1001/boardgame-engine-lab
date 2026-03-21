@@ -1,6 +1,7 @@
 /* @refresh reload */
-import "@backend/public";
 import { render } from "solid-js/web";
+
+import "@backend/public";
 
 import App from "./App.tsx";
 import "./index.css";
