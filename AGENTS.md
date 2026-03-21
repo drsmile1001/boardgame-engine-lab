@@ -1,10 +1,4 @@
-# boardgame-engine-lab Agent 指南
-
-## 目的
-
-- 本文件提供自動化 coding agent 在此 monorepo 內快速、安全完成任務。
-- 規則以目前 repo 實際設定為準，若設定更新請同步調整本文件。
-- 以最小可驗證改動為優先，避免與任務無關的重構。
+# AGENTS 指示
 
 ## 專案結構
 
@@ -18,7 +12,7 @@
 - 套件管理與執行器使用 `bun`。
 - 主要語言是 TypeScript，整體採 strict 方向。
 - 格式化使用 Prettier，並啟用 import sorting plugin。
-- 目前沒有 ESLint，請用 `format:check` + `typecheck` 當靜態品質門檻。
+- 使用 `format:check` + `typecheck` 當靜態品質門檻。
 
 ## 根目錄命令
 
@@ -132,25 +126,11 @@
 - 前端 client 以 `treaty<Api>()` 保持端到端型別一致。
 - 對外共享型別請從 `packages/backend/src/public.ts` 匯出。
 
-## 無 lint 指令時的替代策略
-
-- 格式 gate：`bun run format:check`
-- 型別 gate：`bun run typecheck`
-- 行為 gate：受影響範圍 `bun test`
-
-## Cursor 與 Copilot 規則整合
-
-- 已檢查 `.cursor/rules/`，目前不存在。
-- 已檢查 `.cursorrules`，目前不存在。
-- 已檢查 `.github/copilot-instructions.md`，目前不存在。
-- 若未來新增規則檔，請合併其要求並提高優先級。
-
 ## 代理執行守則
 
-- 先讀目標套件 README 與設定檔再動手。
-- 只改任務相關檔案，避免順手修其他問題。
-- 每次改動後跑受影響區域的 typecheck 或 test。
+- 每次改動後跑受影響區域的 typecheck 與 test。
 - 不引入與既有技術棧無關的新工具鏈。
+  - 優先使用 @drsmile1001/\* 相關工具
 - 未被要求時不調整 CI、版本策略或發版流程。
 
 ## 提交前檢查清單
@@ -159,4 +139,3 @@
 - 受影響測試至少有一次成功執行。
 - 格式檢查通過。
 - 若有 API 變更，已同步更新共享型別並驗證前端。
-- 變更說明包含動機、範圍與風險。
