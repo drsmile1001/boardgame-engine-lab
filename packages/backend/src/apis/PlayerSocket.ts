@@ -23,4 +23,4 @@ export function buildPlayerSocket(deps: Deps) {
   return api;
 }
 
-export type PlayerApi = ReturnType<typeof buildPlayerSocket>;
+export type PlayerSocket = ReturnType<typeof buildPlayerSocket>;

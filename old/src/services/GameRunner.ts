@@ -1,6 +1,6 @@
 import type { AppServices } from "@/app/AppServices";
 import type { Logger } from "@drsmile1001/logger";
-import { isErr } from "~shared/utils/Result";
+import { isErr } from "@drsmile1001/utils/Result";
 
 export type Deps = Pick<
   AppServices,
