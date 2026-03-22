@@ -16,12 +16,15 @@ test("PlayerRepoYaml persists players with entity-store yaml format", async () =
     const repo = new PlayerRepoYaml(createDefaultLoggerFromEnv(), filePath);
     await repo.init();
 
-    expect(repo.list()).toEqual([]);
+    expect(await repo.list()).toEqual([]);
 
     await repo.set({ id: "player-1", name: "Alice" });
 
-    expect(repo.get("player-1")).toEqual({ id: "player-1", name: "Alice" });
-    expect(repo.list()).toEqual([{ id: "player-1", name: "Alice" }]);
+    expect(await repo.get("player-1")).toEqual({
+      id: "player-1",
+      name: "Alice",
+    });
+    expect(await repo.list()).toEqual([{ id: "player-1", name: "Alice" }]);
 
     const raw = await readFile(filePath, "utf-8");
     expect(Bun.YAML.parse(raw)).toEqual({
@@ -35,7 +38,7 @@ test("PlayerRepoYaml persists players with entity-store yaml format", async () =
     );
     await reloadedRepo.init();
 
-    expect(reloadedRepo.get("player-1")).toEqual({
+    expect(await reloadedRepo.get("player-1")).toEqual({
       id: "player-1",
       name: "Alice",
     });

@@ -76,8 +76,8 @@ describe("PlayerApi", () => {
       expectHasSubset(player, {
         name: "New Player",
       });
-      const retrievedPlayer = PlayerRepo.get(player.id)!;
-      expectHasSubset(retrievedPlayer, {
+      const retrievedPlayer = await PlayerRepo.get(player.id)!;
+      expectHasSubset(retrievedPlayer!, {
         name: "New Player",
       });
     })

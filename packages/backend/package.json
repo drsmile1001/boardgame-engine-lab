@@ -10,7 +10,7 @@
     "typegen": "rm -rf .types && bunx tsc -p tsconfig.types.json"
   },
   "dependencies": {
-    "@drsmile1001/entity-store": "^1.0.0",
+    "@drsmile1001/entity-store": "^2.0.0",
     "@drsmile1001/logger": "^2.0.0",
     "@drsmile1001/safe-exit": "^1.0.0",
     "@drsmile1001/service-map": "^1.0.0",
@@ -18,12 +18,12 @@
     "@drsmile1001/utils": "^1.0.0",
     "@sinclair/typebox": "^0.34.48",
     "cac": "^7.0.0",
-    "elysia": "^1.4.27"
+    "elysia": "^1.4.28"
   },
   "devDependencies": {
-    "@drsmile1001/testkit": "^1.1.0",
+    "@drsmile1001/testkit": "^1.1.1",
     "@elysiajs/eden": "^1.4.8",
-    "bun-types": "^1.3.10",
+    "bun-types": "^1.3.11",
     "typescript": "^5.9.3"
   }
 }

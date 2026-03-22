@@ -16,7 +16,7 @@ export function buildRequesterProvider(deps: Deps) {
       const sessionId = sessionCookie.value;
       let requester: Player | undefined = undefined;
       if (sessionId && typeof sessionId === "string") {
-        requester = deps.PlayerRepo.get(sessionId);
+        requester = await deps.PlayerRepo.get(sessionId);
       }
 
       function setRequester(player: Player) {
