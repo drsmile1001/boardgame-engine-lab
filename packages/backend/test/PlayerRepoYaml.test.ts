@@ -6,7 +6,7 @@ import { join } from "node:path";
 
 import { createDefaultLoggerFromEnv } from "@drsmile1001/logger";
 
-import { PlayerRepoYaml } from "@backend/services/PlayerRepoYaml";
+import { PlayerRepoYaml } from "@backend/services/PlayerRepo";
 
 test("PlayerRepoYaml persists players with entity-store yaml format", async () => {
   const tempDir = await mkdtemp(join(tmpdir(), "player-repo-yaml-"));

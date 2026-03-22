@@ -11,7 +11,7 @@ import { buildPlayerSocket } from "./apis/PlayerSocket";
 import type { AppServices } from "./app/AppServices";
 import { buildRequestMonitor } from "./middlewares/RequestMonitor";
 import { GameStoreSplitYaml } from "./services/GameStore";
-import { PlayerRepoYaml } from "./services/PlayerRepoYaml";
+import { PlayerRepoYaml } from "./services/PlayerRepo";
 
 const logger = createDefaultLoggerFromEnv();
 
