@@ -2,10 +2,13 @@ import Elysia from "elysia";
 
 import type { AppServices } from "@backend/app/AppServices";
 
-export type Deps = Pick<AppServices, "Logger" | "PlayerRepo">;
+export type Deps = Pick<
+  AppServices,
+  "Logger" | "PlayerRepo" | "PlayerTransport"
+>;
 
 export function buildPlayerSocket(deps: Deps) {
-  const { Logger } = deps;
+  const { PlayerTransport } = deps;
   const api = new Elysia({
     name: "PlayerSocket",
   }).ws("/ws", {

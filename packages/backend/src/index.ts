@@ -2,7 +2,7 @@ import { readFile, readdir, stat, writeFile } from "node:fs/promises";
 
 import { createDefaultLoggerFromEnv } from "@drsmile1001/logger";
 import { safeExit } from "@drsmile1001/safe-exit";
-import { ServiceMapBuilder } from "@drsmile1001/service-map";
+import { ServiceMapBuilder, resolveMap } from "@drsmile1001/service-map";
 import { Elysia, file } from "elysia";
 
 import { buildLobbyApi } from "./apis/LobbyApi";
@@ -10,6 +10,7 @@ import { buildPlayerApi } from "./apis/PlayerApi";
 import { buildPlayerSocket } from "./apis/PlayerSocket";
 import type { AppServices } from "./app/AppServices";
 import { buildRequestMonitor } from "./middlewares/RequestMonitor";
+import { GameRunner } from "./services/GameRunner";
 import { GameStoreSplitYaml } from "./services/GameStore";
 import { PlayerRepoYaml } from "./services/PlayerRepo";
 
@@ -64,11 +65,11 @@ const services = await ServiceMapBuilder.create<AppServices>()
     await gameStore.init();
     return gameStore;
   })
-  // .register(
-  //   "SessionTransport",
-  //   ({ Logger }) => new SessionTransportDefault(Logger)
-  // )
-  // .register("GameRunner", (deps) => new GameRunner(deps))
+  .register("PlayerTransport", ({ Logger }) => null!) //TODO: 實際實作 PlayerTransport
+  .register(
+    "GameRunner",
+    async (services) => new GameRunner(await resolveMap(services))
+  )
   .build();
 const app = new Elysia()
   .use(buildRequestMonitor(services))

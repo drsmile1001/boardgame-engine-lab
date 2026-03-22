@@ -3,16 +3,28 @@ import { isErr } from "@drsmile1001/utils/Result";
 
 import type { AppServices } from "@backend/app/AppServices";
 
+import { TicTacToe } from "./GameRule/TicTacToe";
+import type { GameStore } from "./GameStore";
+import type { PlayerTransport } from "./PlayerTransport";
+
 export type Deps = Pick<
   AppServices,
-  "Logger" | "SessionTransport" | "GameStore" | "GameRule"
+  "Logger" | "PlayerTransport" | "GameStore"
 >;
 
 export class GameRunner {
   logger: Logger;
-  constructor(private deps: Deps) {
-    this.logger = deps.Logger.extend("GameRunner");
-    deps.SessionTransport.attachPlayerMessageHandler(this.onPlayerMessage);
+  transport: PlayerTransport;
+  gameStore: GameStore;
+  constructor(deps: Deps) {
+    const { Logger, PlayerTransport, GameStore } = deps;
+    this.logger = Logger.extend("GameRunner");
+    PlayerTransport.receiveFromPlayer((playerId, message) => {
+      const { gameId } = message;
+      return this.onPlayerMessage(gameId, playerId, message);
+    });
+    this.transport = PlayerTransport;
+    this.gameStore = GameStore;
   }
   async onPlayerMessage(gameId: string, playerId: string, message: unknown) {
     const logger = this.logger.extend("onPlayerMessage", {
@@ -21,37 +33,52 @@ export class GameRunner {
       message,
     });
     logger.debug()`開始處理 ${gameId} 的玩家 ${playerId} 訊息`;
-    const { GameStore, GameRule, SessionTransport } = this.deps;
-    const state = await GameStore.get(gameId);
-    if (!state) {
-      logger.warn()`遊戲狀態未找到，當作建立新遊戲處理`;
-      const initialState = await GameRule.setup({} as any); //TODO: 這裡應該要有初始參數
-      SessionTransport.sendToPlayer(gameId, playerId, initialState);
+    const game = await this.gameStore.get(gameId);
+    if (!game) {
+      logger.warn()`遊戲 ${gameId} 不存在`;
+      this.transport.sendToPlayer(playerId, {
+        type: "GAME_NOT_FOUND",
+        gameId,
+      });
       return;
     }
-    const moveResult = await GameRule.move(
-      state as any,
+    //TODO: 依據遊戲類型取用遊戲規則實例
+    const rule = new TicTacToe();
+    const moveResult = await rule.move(
+      game as any,
       playerId,
       message as Record<string, unknown>
     );
     if (isErr(moveResult)) {
       logger.warn()`玩家移動失敗：${moveResult.error}`;
-      SessionTransport.sendToPlayer(gameId, playerId, {
-        error: moveResult.error,
+      this.transport.sendToPlayer(playerId, {
+        type: "PLAYER_MOVE_ERROR",
+        gameId,
+        error: "",
       });
       return;
     }
     const newState = moveResult.value;
     try {
-      await GameStore.set(newState as any); //處理 any
+      await this.gameStore.set({
+        ...game,
+        state: newState,
+      });
     } catch {
       logger.error()`無法保存遊戲狀態`;
-      SessionTransport.sendToPlayer(gameId, playerId, {
-        error: "SAVE_FAILED",
+      this.transport.sendToPlayer(playerId, {
+        type: "ERROR",
+        error: "Failed to save game state",
       });
       return;
     }
     logger.info()`玩家移動成功，已保存新狀態`;
-    SessionTransport.sendToPlayer(gameId, playerId, newState);
+    for (const { id } of game.players) {
+      this.transport.sendToPlayer(id, {
+        type: "GAME_STATE_UPDATE",
+        gameId,
+        state: newState,
+      });
+    }
   }
 }
