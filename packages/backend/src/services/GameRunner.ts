@@ -45,7 +45,7 @@ export class GameRunner {
     //TODO: 依據遊戲類型取用遊戲規則實例
     const rule = new TicTacToe();
     const moveResult = await rule.move(
-      game as any,
+      game.state as any, //TODO: gameRule 提供 state 驗證
       playerId,
       message as Record<string, unknown>
     );

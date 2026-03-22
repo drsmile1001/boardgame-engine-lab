@@ -18,8 +18,8 @@ export const gameSchema = t.Object(
     gameId: t.String({ description: "遊戲類型ID" }),
     status: gameStatusSchema,
     players: t.Array(playerSchema),
-    setupContext: t.Optional(t.Any({ description: "遊戲設定相關資訊" })),
-    state: t.Optional(t.Any({ description: "遊戲狀態相關資訊" })),
+    setupContext: t.Optional(t.Unknown({ description: "遊戲設定相關資訊" })),
+    state: t.Optional(t.Unknown({ description: "遊戲狀態相關資訊" })),
   },
   {
     description: "對局資訊",
