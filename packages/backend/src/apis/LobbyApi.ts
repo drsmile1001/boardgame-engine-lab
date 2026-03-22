@@ -1,4 +1,3 @@
-import { isErr } from "@drsmile1001/utils/Result";
 import Elysia, { t } from "elysia";
 import { ulid } from "ulid";
 
@@ -46,7 +45,7 @@ export function buildLobbyApi(deps: Deps) {
             },
           ],
         };
-        await MatchStore.save(newMatch.id, newMatch);
+        await MatchStore.set(newMatch);
         return newMatch;
       },
       {
@@ -73,11 +72,11 @@ export function buildLobbyApi(deps: Deps) {
     .get(
       "/api/matches/:matchId",
       async ({ params, status }) => {
-        const loadResult = await MatchStore.load(params.matchId);
-        if (isErr(loadResult)) {
+        const match = await MatchStore.get(params.matchId);
+        if (!match) {
           return status(404, { type: "MATCH_NOT_FOUND" });
         }
-        return loadResult.value;
+        return match;
       },
       {
         params: t.Object({

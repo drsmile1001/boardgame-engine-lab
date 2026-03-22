@@ -10,7 +10,7 @@ import { buildPlayerApi } from "./apis/PlayerApi";
 import { buildPlayerSocket } from "./apis/PlayerSocket";
 import type { AppServices } from "./app/AppServices";
 import { buildRequestMonitor } from "./middlewares/RequestMonitor";
-import { GameStoreDefault } from "./services/MatchStore";
+import { MatchStoreSplitYaml } from "./services/MatchStore";
 import { PlayerRepoYaml } from "./services/PlayerRepoYaml";
 
 const logger = createDefaultLoggerFromEnv();
@@ -59,10 +59,11 @@ const services = await ServiceMapBuilder.create<AppServices>()
     await playerRepo.init();
     return playerRepo;
   })
-  .register(
-    "MatchStore",
-    ({ Logger }) => new GameStoreDefault(Logger, "game-saves")
-  )
+  .register("MatchStore", async ({ Logger }) => {
+    const matchStore = new MatchStoreSplitYaml(Logger, "game-saves");
+    await matchStore.init();
+    return matchStore;
+  })
   // .register(
   //   "SessionTransport",
   //   ({ Logger }) => new SessionTransportDefault(Logger)

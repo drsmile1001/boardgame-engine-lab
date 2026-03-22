@@ -22,14 +22,13 @@ export class GameRunner {
     });
     logger.debug()`開始處理 ${gameId} 的玩家 ${playerId} 訊息`;
     const { MatchStore: GameStore, GameRule, SessionTransport } = this.deps;
-    const loadResult = await GameStore.load(gameId);
-    if (isErr(loadResult)) {
+    const state = await GameStore.get(gameId);
+    if (!state) {
       logger.warn()`遊戲狀態未找到，當作建立新遊戲處理`;
-      const state = await GameRule.setup({} as any); //TODO: 這裡應該要有初始參數
-      SessionTransport.sendToPlayer(gameId, playerId, state);
+      const initialState = await GameRule.setup({} as any); //TODO: 這裡應該要有初始參數
+      SessionTransport.sendToPlayer(gameId, playerId, initialState);
       return;
     }
-    const state = loadResult.value;
     const moveResult = await GameRule.move(
       state as any,
       playerId,
@@ -43,8 +42,9 @@ export class GameRunner {
       return;
     }
     const newState = moveResult.value;
-    const saveResult = await GameStore.save(gameId, newState as any); //處理 any
-    if (isErr(saveResult)) {
+    try {
+      await GameStore.set(newState as any); //處理 any
+    } catch {
       logger.error()`無法保存遊戲狀態`;
       SessionTransport.sendToPlayer(gameId, playerId, {
         error: "SAVE_FAILED",
