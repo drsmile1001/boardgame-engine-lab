@@ -3,29 +3,29 @@ import { ulid } from "ulid";
 
 import type { AppServices } from "@backend/app/AppServices";
 import { buildRequesterProvider } from "@backend/middlewares/buildRequesterProvider";
-import { type Match, matchBaseInfoSchema } from "@backend/schemas/Match";
+import { type Game, gameBaseInfoSchema } from "@backend/schemas/Game";
 
-export type Deps = Pick<AppServices, "Logger" | "MatchStore" | "PlayerRepo">;
+export type Deps = Pick<AppServices, "Logger" | "GameStore" | "PlayerRepo">;
 
 export function buildLobbyApi(deps: Deps) {
-  const { Logger, MatchStore } = deps;
+  const { Logger, GameStore } = deps;
   return new Elysia({
     name: "LobbyApi",
   })
     .use(buildRequesterProvider(deps))
     .get(
-      "/api/matches",
+      "/api/games",
       async () => {
-        return await MatchStore.list();
+        return await GameStore.list();
       },
       {
         response: {
-          200: t.Array(matchBaseInfoSchema),
+          200: t.Array(gameBaseInfoSchema),
         },
       }
     )
     .post(
-      "/api/matches",
+      "/api/games",
       async ({ body, requester, status }) => {
         if (!requester) {
           return status(403, { type: "FORBIDDEN" });
@@ -33,7 +33,7 @@ export function buildLobbyApi(deps: Deps) {
         const { name, gameId } = body;
         //TODO: 依據 gameId 檢查遊戲類型是否存在
         //TODO: 依據 gameId 取得遊戲預設設定
-        const newMatch: Match = {
+        const newGame: Game = {
           id: ulid(),
           name,
           gameId,
@@ -45,8 +45,8 @@ export function buildLobbyApi(deps: Deps) {
             },
           ],
         };
-        await MatchStore.set(newMatch);
-        return newMatch;
+        await GameStore.set(newGame);
+        return newGame;
       },
       {
         body: t.Object({
@@ -54,7 +54,7 @@ export function buildLobbyApi(deps: Deps) {
           gameId: t.String({ description: "遊戲類型ID" }),
         }),
         response: {
-          200: matchBaseInfoSchema,
+          200: gameBaseInfoSchema,
           400: t.Union([
             t.Object({
               type: t.Literal("GAME_NOT_FOUND"),
@@ -70,22 +70,19 @@ export function buildLobbyApi(deps: Deps) {
       }
     )
     .get(
-      "/api/matches/:matchId",
+      "/api/games/:gameId",
       async ({ params, status }) => {
-        const match = await MatchStore.get(params.matchId);
-        if (!match) {
-          return status(404, { type: "MATCH_NOT_FOUND" });
+        const game = await GameStore.get(params.gameId);
+        if (!game) {
+          return status(404, { type: "GAME_NOT_FOUND" });
         }
-        return match;
+        return game;
       },
       {
-        params: t.Object({
-          matchId: t.String(),
-        }),
         response: {
-          200: matchBaseInfoSchema,
+          200: gameBaseInfoSchema,
           404: t.Object({
-            type: t.Literal("MATCH_NOT_FOUND"),
+            type: t.Literal("GAME_NOT_FOUND"),
           }),
         },
       }

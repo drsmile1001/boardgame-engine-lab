@@ -10,7 +10,7 @@ function MainLayout(props: ParentProps) {
         <li>玩家名稱：訪客玩家（示意）</li>
         <li>
           快速導覽：
-          <A href="/">大廳</A>、<A href="/matches/demo-match">特定對局</A>、
+          <A href="/">大廳</A>、<A href="/games/demo-game">特定對局</A>、
           <A href="/register">註冊</A>
         </li>
       </ul>

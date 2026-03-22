@@ -6,14 +6,15 @@ import { join } from "node:path";
 
 import { createDefaultLoggerFromEnv } from "@drsmile1001/logger";
 
-import { MatchStoreSplitYaml } from "@backend/services/MatchStore";
+import type { Game } from "@backend/schemas/Game";
+import { GameStoreSplitYaml } from "@backend/services/GameStore";
 
-test("MatchStoreSplitYaml persists matches in split yaml files", async () => {
-  const tempDir = await mkdtemp(join(tmpdir(), "match-store-split-yaml-"));
+test("GameStoreSplitYaml persists games in split yaml files", async () => {
+  const tempDir = await mkdtemp(join(tmpdir(), "game-store-split-yaml-"));
   const storePath = join(tempDir, "game-saves");
 
   try {
-    const store = new MatchStoreSplitYaml(
+    const store = new GameStoreSplitYaml(
       createDefaultLoggerFromEnv(),
       storePath
     );
@@ -22,9 +23,9 @@ test("MatchStoreSplitYaml persists matches in split yaml files", async () => {
     expect(await readdir(storePath)).toEqual([]);
     expect(await store.list()).toEqual([]);
 
-    const match = {
-      id: "match-1",
-      name: "Test Match",
+    const game: Game = {
+      id: "game-1",
+      name: "Test Game",
       gameId: "gomoku",
       status: "WATTING_FOR_PLAYERS" as const,
       players: [
@@ -35,23 +36,23 @@ test("MatchStoreSplitYaml persists matches in split yaml files", async () => {
       ],
     };
 
-    await store.set(match);
+    await store.set(game);
 
-    expect(await store.get("match-1")).toEqual(match);
+    expect(await store.get("game-1")).toEqual(game);
     expect(await store.list()).toEqual([
       {
-        id: "match-1",
-        name: "Test Match",
+        id: "game-1",
+        name: "Test Game",
         gameId: "gomoku",
         status: "WATTING_FOR_PLAYERS",
       },
     ]);
 
-    const filePath = join(storePath, "match-1.yaml");
+    const filePath = join(storePath, "game-1.yaml");
     const raw = await readFile(filePath, "utf-8");
     expect(Bun.YAML.parse(raw)).toEqual({
       version: 0,
-      data: match,
+      data: game,
     });
   } finally {
     await rm(tempDir, { recursive: true, force: true });

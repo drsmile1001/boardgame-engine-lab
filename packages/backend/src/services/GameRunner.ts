@@ -5,7 +5,7 @@ import type { AppServices } from "@backend/app/AppServices";
 
 export type Deps = Pick<
   AppServices,
-  "Logger" | "SessionTransport" | "MatchStore" | "GameRule"
+  "Logger" | "SessionTransport" | "GameStore" | "GameRule"
 >;
 
 export class GameRunner {
@@ -21,7 +21,7 @@ export class GameRunner {
       message,
     });
     logger.debug()`開始處理 ${gameId} 的玩家 ${playerId} 訊息`;
-    const { MatchStore: GameStore, GameRule, SessionTransport } = this.deps;
+    const { GameStore, GameRule, SessionTransport } = this.deps;
     const state = await GameStore.get(gameId);
     if (!state) {
       logger.warn()`遊戲狀態未找到，當作建立新遊戲處理`;
