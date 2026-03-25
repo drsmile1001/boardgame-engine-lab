@@ -1,4 +1,5 @@
 import type { MaybePromise } from "@drsmile1001/utils/TypeHelper";
+import type { ElysiaWS } from "elysia/ws";
 
 export type PlayerPayloadHandler = (
   playerId: string,
@@ -32,9 +33,9 @@ export type ReceiveFromPlayerPayload = {
 };
 
 export interface PlayerTransport {
-  connect(): void;
-  disconnect(connectionId: string): void;
-  receiveMessage(connectionId: string, message: unknown): MaybePromise<void>;
+  connect(playerId: string, ws: ElysiaWS): void;
+  disconnect(ws: ElysiaWS): void;
+  receiveMessage(ws: ElysiaWS, message: unknown): MaybePromise<void>;
   sendToPlayer(playerId: string, payload: SendToPlayerPayload): void;
   receiveFromPlayer(handler: PlayerPayloadHandler): void;
 }
