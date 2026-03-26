@@ -18,7 +18,7 @@ export function buildPlayerSocket(deps: Deps) {
       open(ws) {
         const playerId = ws.data.requester?.id;
         if (!playerId) {
-          ws.close(1008, "Unauthorized");
+          ws.close(4401, "Unauthorized");
           return;
         }
         PlayerTransport.connect(playerId, ws);
