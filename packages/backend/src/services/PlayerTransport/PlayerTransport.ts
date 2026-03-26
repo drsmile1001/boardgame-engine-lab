@@ -37,5 +37,8 @@ export interface PlayerTransport {
   disconnect(ws: ElysiaWS): void;
   receiveMessage(ws: ElysiaWS, message: unknown): MaybePromise<void>;
   sendToPlayer(playerId: string, payload: SendToPlayerPayload): void;
+  sendToPlayersInGame(gameId: string, payload: SendToPlayerPayload): void;
+  playerJoinGame(playerId: string, gameId: string): void;
+  playerLeaveGame(playerId: string, gameId: string): void;
   receiveFromPlayer(handler: PlayerPayloadHandler): void;
 }

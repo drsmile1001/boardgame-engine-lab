@@ -13,6 +13,7 @@ import { buildRequestMonitor } from "./middlewares/RequestMonitor";
 import { GameRunner } from "./services/GameRunner";
 import { GameStoreSplitYaml } from "./services/GameStore";
 import { PlayerRepoYaml } from "./services/PlayerRepo";
+import { PlayerTransportElysia } from "./services/PlayerTransport";
 
 const logger = createDefaultLoggerFromEnv();
 
@@ -65,7 +66,10 @@ const services = await ServiceMapBuilder.create<AppServices>()
     await gameStore.init();
     return gameStore;
   })
-  .register("PlayerTransport", ({ Logger }) => null!) //TODO: 實際實作 PlayerTransport
+  .register(
+    "PlayerTransport",
+    ({ Logger }) => new PlayerTransportElysia(Logger)
+  )
   .register(
     "GameRunner",
     async (services) => new GameRunner(await resolveMap(services))

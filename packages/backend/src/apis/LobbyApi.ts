@@ -5,10 +5,13 @@ import type { AppServices } from "@backend/app/AppServices";
 import { buildRequesterProvider } from "@backend/middlewares/buildRequesterProvider";
 import { type Game, gameBaseInfoSchema } from "@backend/schemas/Game";
 
-export type Deps = Pick<AppServices, "Logger" | "GameStore" | "PlayerRepo">;
+export type Deps = Pick<
+  AppServices,
+  "Logger" | "GameStore" | "PlayerRepo" | "PlayerTransport"
+>;
 
 export function buildLobbyApi(deps: Deps) {
-  const { Logger, GameStore } = deps;
+  const { Logger, GameStore, PlayerTransport } = deps;
   return new Elysia({
     name: "LobbyApi",
   })
@@ -46,6 +49,7 @@ export function buildLobbyApi(deps: Deps) {
           ],
         };
         await GameStore.set(newGame);
+        PlayerTransport.playerJoinGame(requester.id, newGame.id);
         return newGame;
       },
       {

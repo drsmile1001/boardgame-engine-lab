@@ -73,12 +73,10 @@ export class GameRunner {
       return;
     }
     logger.info()`玩家移動成功，已保存新狀態`;
-    for (const { id } of game.players) {
-      this.transport.sendToPlayer(id, {
-        type: "GAME_STATE_UPDATE",
-        gameId,
-        state: newState,
-      });
-    }
+    this.transport.sendToPlayersInGame(gameId, {
+      type: "GAME_STATE_UPDATE",
+      gameId,
+      state: newState,
+    });
   }
 }
