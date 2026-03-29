@@ -107,7 +107,7 @@ const app = new Elysia()
     return file("public/index.html");
   })
   .get("/*", () => file("public/index.html"))
-  .listen(3000, (server) => {
+  .listen(3000, () => {
     logger.info(`伺服器已啟動，監聽於 http://localhost:3000${baseUrl}`);
   });
 

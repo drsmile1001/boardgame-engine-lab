@@ -21,6 +21,7 @@ export function buildRequesterProvider(deps: Deps) {
 
       function setRequester(player: Player) {
         requester = player;
+        sessionCookie.httpOnly = true;
         sessionCookie.value = player.id;
         sessionCookie.maxAge = 60 * 60 * 24 * 30; // 30 天
         sessionCookie.expires = new Date(Date.now() + 60 * 60 * 24 * 30 * 1000);

@@ -30,25 +30,23 @@ export function buildPlayerApi(deps: Deps) {
       }
     )
     .post(
-      "/api/self",
-      async ({ body, setRequester }) => {
+      "/api/register/anonymous",
+      async ({ setRequester }) => {
         //TODO: 中斷先前的玩家身分
+        const players = await PlayerRepo.list();
         const newPlayer: Player = {
           id: ulid(),
-          name: body.name,
+          name: `player#${players.length + 1}`,
+          email: null,
         };
         await PlayerRepo.set(newPlayer);
         setRequester(newPlayer);
         return newPlayer;
       },
       {
-        detail: { summary: "註冊成為新玩家" },
-        body: t.Object({
-          name: t.String({ description: "玩家名稱" }),
-        }),
+        detail: { summary: "註冊成匿名玩家" },
         response: {
           200: playerSchema,
-          400: t.Object({}),
         },
       }
     );

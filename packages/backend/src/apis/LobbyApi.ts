@@ -45,6 +45,7 @@ export function buildLobbyApi(deps: Deps) {
             {
               id: requester.id,
               name: requester.name,
+              email: requester.email,
             },
           ],
         };
