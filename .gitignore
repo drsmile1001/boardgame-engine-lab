@@ -33,3 +33,4 @@ packages/backend/.types
 
 # Finder (MacOS) folder config
 .DS_Store
+packages/backend/data

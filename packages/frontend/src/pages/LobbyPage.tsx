@@ -9,10 +9,7 @@ function LobbyPage() {
         <li>
           對局連結：<A href="/games/game-001">前往 game-001</A>
         </li>
-        <li>
-          註冊按鈕（連結）：<A href="/register">前往註冊頁</A>
-        </li>
-        <li>登入按鈕（示意）</li>
+        <li>目前身份已由 welcome 頁面流程處理</li>
         <li>建立對局按鈕（示意）</li>
       </ul>
     </div>

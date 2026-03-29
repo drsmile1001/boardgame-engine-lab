@@ -13,7 +13,9 @@ import { buildRequestMonitor } from "./middlewares/RequestMonitor";
 import { GameRunner } from "./services/GameRunner";
 import { GameStoreSplitYaml } from "./services/GameStore";
 import { PlayerRepoYaml } from "./services/PlayerRepo";
+import { PlayerResolverDefault } from "./services/PlayerResolver";
 import { PlayerTransportElysia } from "./services/PlayerTransport";
+import { SessionStoreYaml } from "./services/SessionStore";
 
 const logger = createDefaultLoggerFromEnv();
 
@@ -57,12 +59,21 @@ await rewriteBaseUrl("public");
 const services = await ServiceMapBuilder.create<AppServices>()
   .register("Logger", logger)
   .register("PlayerRepo", async ({ Logger }) => {
-    const playerRepo = new PlayerRepoYaml(Logger, "players.yaml");
+    const playerRepo = new PlayerRepoYaml(Logger, "data/players.yaml");
     await playerRepo.init();
     return playerRepo;
   })
+  .register("SessionStore", async ({ Logger }) => {
+    const sessionStore = new SessionStoreYaml(Logger, "data/sessions.yaml");
+    await sessionStore.init();
+    return sessionStore;
+  })
+  .register("PlayerResolver", async (services) => {
+    const { SessionStore, PlayerRepo } = await resolveMap(services);
+    return new PlayerResolverDefault(SessionStore, PlayerRepo);
+  })
   .register("GameStore", async ({ Logger }) => {
-    const gameStore = new GameStoreSplitYaml(Logger, "game-saves");
+    const gameStore = new GameStoreSplitYaml(Logger, "data/game-saves");
     await gameStore.init();
     return gameStore;
   })

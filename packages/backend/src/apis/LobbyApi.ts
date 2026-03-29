@@ -2,12 +2,12 @@ import Elysia, { t } from "elysia";
 import { ulid } from "ulid";
 
 import type { AppServices } from "@backend/app/AppServices";
-import { buildRequesterProvider } from "@backend/middlewares/buildRequesterProvider";
+import { buildPlayerProvider } from "@backend/middlewares/buildPlayerProvider";
 import { type Game, gameBaseInfoSchema } from "@backend/schemas/Game";
 
 export type Deps = Pick<
   AppServices,
-  "Logger" | "GameStore" | "PlayerRepo" | "PlayerTransport"
+  "Logger" | "GameStore" | "PlayerResolver" | "PlayerTransport"
 >;
 
 export function buildLobbyApi(deps: Deps) {
@@ -15,7 +15,7 @@ export function buildLobbyApi(deps: Deps) {
   return new Elysia({
     name: "LobbyApi",
   })
-    .use(buildRequesterProvider(deps))
+    .use(buildPlayerProvider(deps))
     .get(
       "/api/games",
       async () => {

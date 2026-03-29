@@ -32,6 +32,7 @@ test("GameStoreSplitYaml persists games in split yaml files", async () => {
         {
           id: "player-1",
           name: "Alice",
+          email: null,
         },
       ],
     };

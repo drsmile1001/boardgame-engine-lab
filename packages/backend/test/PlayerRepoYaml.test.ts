@@ -18,18 +18,21 @@ test("PlayerRepoYaml persists players with entity-store yaml format", async () =
 
     expect(await repo.list()).toEqual([]);
 
-    await repo.set({ id: "player-1", name: "Alice" });
+    await repo.set({ id: "player-1", name: "Alice", email: null });
 
     expect(await repo.get("player-1")).toEqual({
       id: "player-1",
       name: "Alice",
+      email: null,
     });
-    expect(await repo.list()).toEqual([{ id: "player-1", name: "Alice" }]);
+    expect(await repo.list()).toEqual([
+      { id: "player-1", name: "Alice", email: null },
+    ]);
 
     const raw = await readFile(filePath, "utf-8");
     expect(Bun.YAML.parse(raw)).toEqual({
       version: 0,
-      data: [{ id: "player-1", name: "Alice" }],
+      data: [{ id: "player-1", name: "Alice", email: null }],
     });
 
     const reloadedRepo = new PlayerRepoYaml(
@@ -41,6 +44,7 @@ test("PlayerRepoYaml persists players with entity-store yaml format", async () =
     expect(await reloadedRepo.get("player-1")).toEqual({
       id: "player-1",
       name: "Alice",
+      email: null,
     });
   } finally {
     await rm(tempDir, { recursive: true, force: true });

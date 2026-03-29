@@ -1,11 +1,11 @@
 import Elysia from "elysia";
 
 import type { AppServices } from "@backend/app/AppServices";
-import { buildRequesterProvider } from "@backend/middlewares/buildRequesterProvider";
+import { buildPlayerProvider } from "@backend/middlewares/buildPlayerProvider";
 
 export type Deps = Pick<
   AppServices,
-  "Logger" | "PlayerRepo" | "PlayerTransport"
+  "Logger" | "PlayerResolver" | "PlayerTransport"
 >;
 
 export function buildPlayerSocket(deps: Deps) {
@@ -13,7 +13,7 @@ export function buildPlayerSocket(deps: Deps) {
   const api = new Elysia({
     name: "PlayerSocket",
   })
-    .use(buildRequesterProvider(deps))
+    .use(buildPlayerProvider(deps))
     .ws("/ws", {
       open(ws) {
         const playerId = ws.data.requester?.id;
